@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="mall/header::head-fragment('FastPuter - Personal Center','personal')">
+</head>
+<link th:href="@{/mall/css/bootstrap-modal.css}" rel="stylesheet">
+<body>
+<header th:replace="mall/header::header-fragment"></header>
+<!-- nav -->
+<nav th:replace="mall/header::nav-fragment"></nav>
+
+<!-- personal -->
+<div id="personal">
+    <div class="self-info center">
+
+        <!-- sidebar -->
+        <div th:replace="mall/personal-sidebar::sidebar-fragment"></div>
+
+        <div class="intro fr">
+            <div class="grzlbt ml40">My Profile <a href="javascript:openUpdateModal();"
+                                             style="color:#1baeae;margin-left: 600px;">Change my profile</a>
+            </div>
+            <div class="info_item ml40"><span>Nickname</span><span
+                    th:text="${session.fastPuterUser.nickName}">fastputer</span>
+            </div>
+            <div class="info_item ml40"><span>Username</span><span
+                    th:text="${session.fastPuterUser.loginName}">fastputer</span>
+            </div>
+            <div class="info_item ml40"><span>Password</span><span>******</span>
+            </div>
+            <div class="info_item ml40"><span>Signature</span><span
+                    th:text="${session.fastPuterUser.introduceSign==''?'null':session.fastPuterUser.introduceSign}">fastputer</span>
+            </div>
+            <div class="info_item ml40"><span>Address</span><span
+                    th:text="${session.fastPuterUser.address==''?'null':session.fastPuterUser.address}">fastputer</span></span>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="content">
+        <div class="modal fade" id="personalInfoModal" tabindex="-1" role="dialog"
+             aria-labelledby="personalInfoModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h6 class="modal-title" id="personalInfoModalLabel">Change of personal information</h6>
+                    </div>
+                    <div class="modal-body">
+                        <form id="personalInfoForm">
+                            <div class="form-group">
+                                <label for="nickName" class="control-label">Nickname:</label>
+                                <input type="hidden" id="userId" th:value="${session.fastPuterUser.userId}">
+                                <input type="text" class="form-control" id="nickName" name="nickName"
+                                       placeholder="Please enter your nickname" th:value="${session.fastPuterUser.nickName}"
+                                       required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="introduceSign" class="control-label">Personalized Signature:</label>
+                                <input type="text" class="form-control" id="introduceSign" name="introduceSign"
+                                       placeholder="Please enter your personalized Signature" th:value="${session.fastPuterUser.introduceSign}"
+                                       required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="address" class="control-label">Address:</label>
+                                <input type="text" class="form-control" id="address" name="address"
+                                       placeholder="Please enter your address" th:value="${session.fastPuterUser.address}"
+                                       required="true">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancle</button>
+                        <button type="button" class="btn btn-primary" id="saveButton">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+    </div>
+</div>
+
+<div th:replace="mall/footer::footer-fragment"></div>
+
+<!-- jQuery -->
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 3 -->
+<script th:src="@{/mall/js/bootstrap3.js}"></script>
+<script th:src="@{/mall/js/search.js}" type="text/javascript"></script>
+<script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
+<script type="text/javascript">
+    function openUpdateModal() {
+        $('#personalInfoModal').modal('show');
+    }
+
+    $('#saveButton').click(function () {
+        var address = $("#address").val();
+        if (address.trim().length < 10) {
+            swal("Please enter correct address", {
+                icon: "error",
+            });
+            return;
+        }
+        var introduceSign = $("#introduceSign").val();
+        if (introduceSign.trim().length < 4) {
+            swal("Please type correct signature", {
+                icon: "error",
+            });
+            return;
+        }
+        var nickName = $("#nickName").val();
+        if (nickName.trim().length < 2) {
+            swal("Please type correct nickname", {
+                icon: "error",
+            });
+            return;
+        }
+        var userId = $("#userId").val();
+        var data = {
+            "userId": userId,
+            "address": address,
+            "introduceSign": introduceSign,
+            "nickName": nickName
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/personal/updateInfo',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (result) {
+                if (result.resultCode == 200) {
+                    $('#personalInfoModal').modal('hide');
+                    window.location.reload();
+                } else {
+                    $('#personalInfoModal').modal('hide');
+                    alert(result.message);
+                }
+                ;
+            },
+            error: function () {
+                alert('Operation failed');
+            }
+        });
+    });
+</script>
+</body>
+</html>
