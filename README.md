@@ -77,17 +77,5 @@ You may add some trend item through here  once you login management system
 
 
 
-Notes:
-
-1.All captcha use lowercase to enter
-
-2.There is a bug of adding category in category management, not serious, so just ignore it for now
-
-3.Please edit on front end, make it looks better and user-friendly.
-
-4.Please collect more data, and follow the orders and rules to fullfill the fastputer.sql, right now is not enough. I gave you guys example how to (Just look at the fastputer.sql file)
-
-5.You may want to use IntelliJ IDEA and have your Maven installed(Youtube easy one)
-
 
 
