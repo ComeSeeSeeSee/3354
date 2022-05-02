@@ -86,10 +86,7 @@
             <th:block th:unless="${#lists.isEmpty(recommendGoodses)}">
                 <th:block th:each="recommendGoods : ${recommendGoodses}">
                     <li>
-                        <a th:href="@{'/goods/detail/'+${recommendGoods.goodsId}}">
-                            <div class="info discount" th:text="${recommendGoods.tag}">
-                                New
-                            </div>
+                        <a th:href="@{'/goods/detail/'+${recommendGoods.goodsId}}">      
                             <img th:src="@{${recommendGoods.goodsCoverImg}}" th:alt="${recommendGoods.goodsName}">
                             <p class="name" th:text="${recommendGoods.goodsName}">FastPuter</p>
                             <p class="price" th:text="${recommendGoods.sellingPrice}">FastPuter</p>
